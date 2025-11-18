@@ -10,10 +10,19 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-import { LayoutDashboard, Lock, Heart, Settings } from "lucide-react"
+import { LayoutDashboard, Lock, Heart, Settings, LogOut } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 
-const menu_items = [
+type SidebarVariant = "default" | "outline" | "destructive"
+
+interface MenuItem {
+    title: string
+    url: string
+    icon: any
+    variant?: SidebarVariant
+}
+
+const menu_items: MenuItem[] = [
     {
         title: "Dashboard",
         url: "#",
@@ -28,6 +37,20 @@ const menu_items = [
         title: "Favorites",
         url: "#",
         icon: Heart
+    }
+]
+
+const footer_items: MenuItem[] = [
+    {
+        title: "Settings",
+        url: "#",
+        icon: Settings
+    },
+    {
+        title: "Logout",
+        url: "#",
+        icon: LogOut,
+        variant: "destructive"
     }
 ]
 
@@ -64,7 +87,20 @@ export function AppSidebar() {
                     </SidebarMenu>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter />
+            <SidebarFooter>
+                <SidebarMenu>
+                    {footer_items.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton variant={item.variant ?? "default"} asChild>
+                                <a href={item.url}>
+                                    <item.icon />
+                                    <span>{item.title}</span>
+                                </a>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
+            </SidebarFooter>
         </Sidebar>
     )
 }
