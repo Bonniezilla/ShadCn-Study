@@ -12,6 +12,7 @@ import {
 
 import { LayoutDashboard, Lock, Heart, Settings, LogOut } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
+import LogoutAlert from "./logout-alert"
 
 type SidebarVariant = "default" | "outline" | "destructive"
 
@@ -56,10 +57,10 @@ const footer_items: MenuItem[] = [
 
 export function AppSidebar() {
     return (
-        <Sidebar>
+        <Sidebar className="py-2">
             <SidebarHeader>
                 <div className="flex items-center gap-3 px-1">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary dark:bg-primary text-white">
                         <Lock />
                     </div>
                     <div className="flex flex-col">
@@ -67,7 +68,7 @@ export function AppSidebar() {
                         <p className="text-sm text-muted-foreground leading-none">Password Manager</p>
 
                     </div>
-                        <ThemeToggle />
+                    <ThemeToggle />
                 </div>
             </SidebarHeader>
             <SidebarContent>
@@ -89,16 +90,28 @@ export function AppSidebar() {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                    {footer_items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
+                    {footer_items.map((item) => {
+                        const isLogout = item.title === "Logout";
+
+                        const ButtonContent = (
                             <SidebarMenuButton variant={item.variant ?? "default"} asChild>
                                 <a href={item.url}>
                                     <item.icon />
                                     <span>{item.title}</span>
                                 </a>
                             </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
+                        )
+
+                        return (
+                            <SidebarMenuItem key={item.title}>
+                                {isLogout ? (
+                                    <LogoutAlert>{ButtonContent}</LogoutAlert>
+                                ) : (
+                                    ButtonContent
+                                )}
+                            </SidebarMenuItem>
+                        )
+                    })}
                 </SidebarMenu>
             </SidebarFooter>
         </Sidebar>
